@@ -33,14 +33,24 @@ export default function ClientPage({ profileId }: ClientPageProps) {
     };S.browser_fallback_url=${encodeURIComponent(GOOGLE_PLAY_URL)};end`;
 
     if (detectedPlatform === "ios") {
-      const timer = setTimeout(() => {
+      const storeTimer = setTimeout(() => {
         window.location.href = APP_STORE_URL;
       }, 2200);
 
-      // Universal link will open the app if installed; blur/visibility cancels store fallback
-      const handleBlur = () => clearTimeout(timer);
+      // Safety: if we are still on this page after a bit, show desktop view instead of spinning forever
+      const fallbackRenderTimer = setTimeout(() => {
+        setRedirecting(false);
+      }, 4000);
+
+      const handleBlur = () => {
+        clearTimeout(storeTimer);
+        clearTimeout(fallbackRenderTimer);
+      };
       const handleVisibilityChange = () => {
-        if (document.hidden) clearTimeout(timer);
+        if (document.hidden) {
+          clearTimeout(storeTimer);
+          clearTimeout(fallbackRenderTimer);
+        }
       };
 
       window.addEventListener("blur", handleBlur);
@@ -49,18 +59,29 @@ export default function ClientPage({ profileId }: ClientPageProps) {
       window.location.href = universalUrl;
 
       return () => {
-        clearTimeout(timer);
+        clearTimeout(storeTimer);
+        clearTimeout(fallbackRenderTimer);
         window.removeEventListener("blur", handleBlur);
         document.removeEventListener("visibilitychange", handleVisibilityChange);
       };
     } else if (detectedPlatform === "android") {
-      const timer = setTimeout(() => {
+      const storeTimer = setTimeout(() => {
         window.location.href = GOOGLE_PLAY_URL;
       }, 2200);
 
-      const handleBlur = () => clearTimeout(timer);
+      const fallbackRenderTimer = setTimeout(() => {
+        setRedirecting(false);
+      }, 4000);
+
+      const handleBlur = () => {
+        clearTimeout(storeTimer);
+        clearTimeout(fallbackRenderTimer);
+      };
       const handleVisibilityChange = () => {
-        if (document.hidden) clearTimeout(timer);
+        if (document.hidden) {
+          clearTimeout(storeTimer);
+          clearTimeout(fallbackRenderTimer);
+        }
       };
 
       window.addEventListener("blur", handleBlur);
@@ -69,7 +90,8 @@ export default function ClientPage({ profileId }: ClientPageProps) {
       window.location.href = androidIntent;
 
       return () => {
-        clearTimeout(timer);
+        clearTimeout(storeTimer);
+        clearTimeout(fallbackRenderTimer);
         window.removeEventListener("blur", handleBlur);
         document.removeEventListener("visibilitychange", handleVisibilityChange);
       };
