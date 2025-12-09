@@ -9,13 +9,13 @@ export async function GET() {
       apps: [],
       details: [
         {
-          appID: `{APP_CONFIG.iosAppStoreId}.${APP_CONFIG.iosBundleId}`,
+          appID: `${APP_CONFIG.iosTeamId}.${APP_CONFIG.iosBundleId}`,
           paths: ['*'], 
         },
       ],
     },
     webcredentials: {
-      apps: [`{APP_CONFIG.iosAppStoreId}.${APP_CONFIG.iosBundleId}`],
+      apps: [`${APP_CONFIG.iosTeamId}.${APP_CONFIG.iosBundleId}`],
     },
   };
 

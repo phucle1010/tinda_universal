@@ -1,4 +1,5 @@
 export const APP_CONFIG = {
+  iosTeamId: "FL8C342Y9U",
   iosAppStoreId: "6752797791",
   iosBundleId: "com.sanpot.tinda-mobile-fe",
   androidPackageName: "com.sanpot.tinda_mobile_fe",
