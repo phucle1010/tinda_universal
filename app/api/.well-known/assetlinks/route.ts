@@ -3,13 +3,15 @@ import { NextResponse } from "next/server";
 import { APP_CONFIG } from "../../../../constants/app";
 
 export async function GET() {
+  const fingerprints = (APP_CONFIG.androidSha256Fingerprints || []).filter(Boolean);
+
   const data = [
     {
       relation: ["delegate_permission/common.handle_all_urls"],
       target: {
         namespace: "android_app",
         package_name: APP_CONFIG.androidPackageName,
-        sha256_cert_fingerprints: APP_CONFIG.androidSha256Fingerprints,
+        sha256_cert_fingerprints: fingerprints,
       },
     },
   ];

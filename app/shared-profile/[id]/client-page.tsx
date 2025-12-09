@@ -32,7 +32,21 @@ export default function ClientPage({ profileId }: ClientPageProps) {
       APP_CONFIG.androidPackageName
     };S.browser_fallback_url=${encodeURIComponent(GOOGLE_PLAY_URL)};end`;
 
+    // Prevent redirect loops when universal link falls back to this same page.
+    const lastAttemptKey = "tinda_universal_attempt_ts";
+    const lastAttempt = Number(localStorage.getItem(lastAttemptKey) || 0);
+    const now = Date.now();
+    const attemptedRecently = now - lastAttempt < 5000;
+
     if (detectedPlatform === "ios") {
+      if (attemptedRecently) {
+        setRedirecting(false);
+        window.location.replace(APP_STORE_URL);
+        return;
+      }
+
+      localStorage.setItem(lastAttemptKey, `${now}`);
+
       const storeTimer = setTimeout(() => {
         window.location.href = APP_STORE_URL;
       }, 2200);
