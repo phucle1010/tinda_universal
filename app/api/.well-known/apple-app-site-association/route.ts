@@ -8,7 +8,7 @@ export async function GET() {
       apps: [],
       details: [
         {
-          appID: `${APP_CONFIG.iosTeamId}.${APP_CONFIG.iosBundleId}`,
+          appID: `${APP_CONFIG.iosAppStoreId}.${APP_CONFIG.iosBundleId}`,
           paths: ["/shared-profile/*", "/profile/*"],
         },
       ],
